@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMAC International — Quality Signal Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12232E;
+    --slate:#4A6572;
+    --brass:#B8862E;
+    --paper:#F7F5F0;
+    --paper-2:#EFEBE1;
+    --err:#B3413E;
+    --line:#D8D2C2;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--brass);}
+
+  /* ---- Header ---- */
+  header{
+    padding:48px 24px 32px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  .brand-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--brass);
+    margin:0 0 10px;
+  }
+  h1{
+    font-family:'Newsreader', serif;
+    font-weight:600;
+    font-size:clamp(28px,5vw,42px);
+    margin:0 0 8px;
+    letter-spacing:-0.01em;
+  }
+  .subhead{
+    font-family:'Newsreader', serif;
+    font-style:italic;
+    font-weight:500;
+    color:var(--slate);
+    font-size:18px;
+    margin:0 0 4px;
+  }
+  .tagline{
+    font-size:14px;
+    color:var(--slate);
+    margin:8px 0 28px;
+  }
+  svg.runchart{
+    display:block;
+    margin:0 auto;
+    width:min(560px,90%);
+    height:64px;
+  }
+  .runchart path.noise{
+    fill:none;
+    stroke:var(--line);
+    stroke-width:2;
+    stroke-dasharray:600;
+    stroke-dashoffset:600;
+    animation:draw 1.8s ease forwards;
+  }
+  .runchart path.signal{
+    fill:none;
+    stroke:var(--brass);
+    stroke-width:2.5;
+    stroke-dasharray:300;
+    stroke-dashoffset:300;
+    animation:draw 1.4s ease forwards 1.4s;
+  }
+  .runchart circle{
+    fill:var(--brass);
+    opacity:0;
+    animation:pop .5s ease forwards 2.6s;
+  }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+  @keyframes pop{ to{ opacity:1; } }
+  @media (prefers-reduced-motion: reduce){
+    .runchart path, .runchart circle{ animation:none !important; stroke-dashoffset:0 !important; opacity:1 !important; }
+  }
+
+  /* ---- Progress ---- */
+  .progress-wrap{
+    max-width:640px;
+    margin:28px auto 0;
+    padding:0 24px;
+  }
+  .progress-track{
+    height:3px;
+    background:var(--line);
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:25%;
+    background:var(--brass);
+    transition:width .35s ease;
+  }
+  .progress-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--slate);
+    margin-top:8px;
+    display:flex;
+    justify-content:space-between;
+  }
+
+  /* ---- Form ---- */
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:32px 24px 100px;
+  }
+  .section{ display:none; animation:fadeIn .4s ease; }
+  .section.active{ display:block; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .section-title{
+    font-family:'Newsreader', serif;
+    font-weight:600;
+    font-size:24px;
+    margin:0 0 4px;
+  }
+  .section-desc{
+    color:var(--slate);
+    font-size:14px;
+    margin:0 0 28px;
+  }
+
+  .q{ margin-bottom:28px; }
+  .q-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--brass);
+    display:block;
+    margin-bottom:6px;
+  }
+  .q-label{
+    font-size:16px;
+    font-weight:500;
+    display:block;
+    margin-bottom:12px;
+    line-height:1.4;
+  }
+  input[type=text], input[type=email], textarea, select{
+    width:100%;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:15px;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    background:#fff;
+    color:var(--ink);
+  }
+  textarea{ min-height:90px; resize:vertical; }
+  input:focus, textarea:focus, select:focus{
+    outline:2px solid var(--brass);
+    outline-offset:1px;
+    border-color:var(--brass);
+  }
+
+  .options{ display:flex; flex-direction:column; gap:8px; }
+  .option{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    background:#fff;
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .option:hover{ border-color:var(--brass); }
+  .option input{ accent-color:var(--brass); width:16px; height:16px; }
+  .option.checked{ border-color:var(--brass); background:#FBF6EC; }
+  .option span{ font-size:15px; }
+
+  .scale{ display:flex; gap:8px; }
+  .scale label{
+    flex:1;
+    text-align:center;
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:10px 0;
+    cursor:pointer;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    background:#fff;
+  }
+  .scale input{ display:none; }
+  .scale input:checked + span{ color:#fff; }
+  .scale label.checked{ background:var(--ink); border-color:var(--ink); color:#fff; }
+  .scale-caption{
+    display:flex; justify-content:space-between;
+    font-size:11px; color:var(--slate); margin-top:6px;
+  }
+
+  .nav-row{
+    display:flex;
+    justify-content:space-between;
+    margin-top:36px;
+  }
+  button{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-weight:600;
+    font-size:14px;
+    padding:12px 24px;
+    border-radius:6px;
+    border:none;
+    cursor:pointer;
+  }
+  .btn-primary{ background:var(--ink); color:#fff; }
+  .btn-primary:hover{ background:#0A1620; }
+  .btn-ghost{ background:transparent; color:var(--slate); border:1px solid var(--line); }
+  .btn-ghost:hover{ border-color:var(--slate); }
+  button:disabled{ opacity:.4; cursor:not-allowed; }
+
+  /* ---- States ---- */
+  .state{ display:none; text-align:center; padding:60px 24px; }
+  .state.active{ display:block; }
+  .state h2{ font-family:'Newsreader', serif; font-size:26px; margin-bottom:10px; }
+  .state p{ color:var(--slate); font-size:15px; }
+  .spinner{
+    width:28px; height:28px; margin:0 auto 20px;
+    border:3px solid var(--line);
+    border-top-color:var(--brass);
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  footer{
+    text-align:center;
+    padding:24px;
+    font-size:12px;
+    color:var(--slate);
+    border-top:1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="brand-eyebrow">OMAC International</p>
+  <h1>Quality Signal Survey</h1>
+  <p class="subhead">Detecting genuine change in healthcare quality data</p>
+  <svg class="runchart" viewBox="0 0 560 64" preserveAspectRatio="none">
+    <path class="noise" d="M0,40 L40,32 L80,44 L120,28 L160,40 L200,30 L240,42 L280,34 L320,38 L360,30" />
+    <path class="signal" d="M360,30 L400,20 L440,14 L480,12 L520,11 L560,10" />
+    <circle cx="480" cy="12" r="4"></circle>
+  </svg>
+  <p class="tagline">A short survey for quality, patient safety, and accreditation professionals worldwide</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label"><span id="progressText">Section 1 of 4</span><span id="progressPct">25%</span></div>
+</div>
+
+<main>
+  <form id="surveyForm">
+
+    <!-- Section 1 -->
+    <section class="section active" data-section="1">
+      <h2 class="section-title">Background</h2>
+      <p class="section-desc">A little about you and your organisation.</p>
+
+      <div class="q">
+        <span class="q-num">01</span>
+        <label class="q-label" for="q1">What is your current role?</label>
+        <input type="text" id="q1" name="q1" placeholder="e.g. Quality Manager, QA Executive, Patient Safety Officer" required>
+      </div>
+
+      <div class="q">
+        <span class="q-num">02</span>
+        <label class="q-label">What accreditation standards does your organisation work with?</label>
+        <div class="options" data-name="q2">
+          <label class="option"><input type="checkbox" name="q2" value="JCI"><span>JCI</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="ISO 9001"><span>ISO 9001</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="ISO 15189"><span>ISO 15189</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="CAP"><span>CAP</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="National standards"><span>National standards</span></label>
+        </div>
+        <input type="text" id="q2other" placeholder="Other (optional)" style="margin-top:8px;">
+      </div>
+
+      <div class="q">
+        <span class="q-num">03</span>
+        <label class="q-label" for="q3">Years of experience in healthcare quality</label>
+        <select id="q3" name="q3" required>
+          <option value="">Select one</option>
+          <option>Less than 2 years</option>
+          <option>2–5 years</option>
+          <option>6–10 years</option>
+          <option>More than 10 years</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="section" data-section="2">
+      <h2 class="section-title">Current Practice</h2>
+      <p class="section-desc">How your organisation reads change in its own data.</p>
+
+      <div class="q">
+        <span class="q-num">04</span>
+        <label class="q-label">When your organisation runs a quality improvement initiative, how do you currently determine whether the resulting change in a metric is a genuine, sustained shift rather than normal variation?</label>
+        <div class="options" data-name="q4">
+          <label class="option"><input type="radio" name="q4" value="Statistical process control (control charts, run charts)"><span>Statistical process control (control charts, run charts)</span></label>
+          <label class="option"><input type="radio" name="q4" value="Simple before/after comparison of averages"><span>Simple before/after comparison of averages</span></label>
+          <label class="option"><input type="radio" name="q4" value="Statistical tests (t-test, chi-square, etc.)"><span>Statistical tests (t-test, chi-square, etc.)</span></label>
+          <label class="option"><input type="radio" name="q4" value="Clinical/expert judgment only"><span>Clinical/expert judgment only</span></label>
+        </div>
+        <input type="text" id="q4other" placeholder="Other (optional)" style="margin-top:8px;">
+      </div>
+
+      <div class="q">
+        <span class="q-num">05</span>
+        <label class="q-label">How confident are you that your current method reliably distinguishes a real shift from random noise?</label>
+        <div class="scale" data-name="q5">
+          <label><input type="radio" name="q5" value="1"><span>1</span></label>
+          <label><input type="radio" name="q5" value="2"><span>2</span></label>
+          <label><input type="radio" name="q5" value="3"><span>3</span></label>
+          <label><input type="radio" name="q5" value="4"><span>4</span></label>
+          <label><input type="radio" name="q5" value="5"><span>5</span></label>
+        </div>
+        <div class="scale-caption"><span>Not confident</span><span>Very confident</span></div>
+      </div>
+
+      <div class="q">
+        <span class="q-num">06</span>
+        <label class="q-label">Has your organisation ever acted on a metric change (e.g. praised a team, changed a policy) that later turned out to be random variation, not a real shift?</label>
+        <div class="options" data-name="q6">
+          <label class="option"><input type="radio" name="q6" value="Yes"><span>Yes</span></label>
+          <label class="option"><input type="radio" name="q6" value="No"><span>No</span></label>
+          <label class="option"><input type="radio" name="q6" value="Not sure"><span>Not sure</span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="section" data-section="3">
+      <h2 class="section-title">Awareness of Objective Detection Methods</h2>
+      <p class="section-desc">Your familiarity with run-chart shift rules.</p>
+
+      <div class="q">
+        <span class="q-num">07</span>
+        <label class="q-label">Are you familiar with run-chart-based statistical rules for detecting non-random shifts (e.g. shift rules, trend rules, astronomical point detection)?</label>
+        <div class="options" data-name="q7">
+          <label class="option"><input type="radio" name="q7" value="Yes, fully"><span>Yes, fully</span></label>
+          <label class="option"><input type="radio" name="q7" value="Somewhat"><span>Somewhat</span></label>
+          <label class="option"><input type="radio" name="q7" value="Not at all"><span>Not at all</span></label>
+        </div>
+      </div>
+
+      <div class="q">
+        <span class="q-num">08</span>
+        <label class="q-label">Would a simple, objective statistical rule for flagging genuine shifts in run-chart data be useful in your role?</label>
+        <div class="options" data-name="q8">
+          <label class="option"><input type="radio" name="q8" value="Yes"><span>Yes</span></label>
+          <label class="option"><input type="radio" name="q8" value="No"><span>No</span></label>
+          <label class="option"><input type="radio" name="q8" value="Unsure"><span>Unsure</span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="section" data-section="4">
+      <h2 class="section-title">Open Feedback</h2>
+      <p class="section-desc">In your own words.</p>
+
+      <div class="q">
+        <span class="q-num">09</span>
+        <label class="q-label" for="q9">In your experience, what is the biggest challenge in proving that a quality or culture intervention actually caused a measurable improvement?</label>
+        <textarea id="q9" name="q9"></textarea>
+      </div>
+
+      <div class="q">
+        <span class="q-num">10</span>
+        <label class="q-label" for="q10">Any additional comments?</label>
+        <textarea id="q10" name="q10"></textarea>
+      </div>
+    </section>
+
+    <div class="nav-row">
+      <button type="button" class="btn-ghost" id="backBtn">Back</button>
+      <button type="button" class="btn-primary" id="nextBtn">Continue</button>
+    </div>
+  </form>
+
+  <div class="state" id="submittingState">
+    <div class="spinner"></div>
+    <h2>Sending your responses…</h2>
+    <p>This only takes a moment.</p>
+  </div>
+
+  <div class="state" id="successState">
+    <h2>Thank you</h2>
+    <p>Your response has been recorded. It will directly inform the OAPR research being developed by OMAC International.</p>
+  </div>
+
+  <div class="state" id="errorState">
+    <h2>Something went wrong</h2>
+    <p>Your response wasn't sent. Please check your connection and try again.</p>
+    <button type="button" class="btn-primary" id="retryBtn" style="margin-top:16px;">Try again</button>
+  </div>
+</main>
+
+<footer>OMAC International — Healthcare Quality Research</footer>
+
+<script>
+  // ⚠️ Replace with your deployed Google Apps Script Web App URL
+  const SCRIPT_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+  const totalSections = 4;
+  let current = 1;
+
+  const form = document.getElementById('surveyForm');
+  const nextBtn = document.getElementById('nextBtn');
+  const backBtn = document.getElementById('backBtn');
+  const progressFill = document.getElementById('progressFill');
+  const progressText = document.getElementById('progressText');
+  const progressPct = document.getElementById('progressPct');
+
+  function updateProgress(){
+    const pct = Math.round((current/totalSections)*100);
+    progressFill.style.width = pct + '%';
+    progressText.textContent = `Section ${current} of ${totalSections}`;
+    progressPct.textContent = pct + '%';
+    backBtn.disabled = current === 1;
+    nextBtn.textContent = current === totalSections ? 'Submit' : 'Continue';
+  }
+
+  function showSection(n){
+    document.querySelectorAll('.section').forEach(s => {
+      s.classList.toggle('active', Number(s.dataset.section) === n);
+    });
+    updateProgress();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function validateSection(n){
+    const section = document.querySelector(`.section[data-section="${n}"]`);
+    const requiredInputs = section.querySelectorAll('[required]');
+    for (const input of requiredInputs){
+      if (!input.value){ input.reportValidity(); return false; }
+    }
+    return true;
+  }
+
+  // visual state for custom option/scale controls
+  document.querySelectorAll('.option input, .scale input').forEach(input => {
+    input.addEventListener('change', () => {
+      const groupName = input.name;
+      document.querySelectorAll(`input[name="${groupName}"]`).forEach(i => {
+        const wrapper = i.closest('.option, label');
+        if (i.type === 'radio' || i.type === 'checkbox') {
+          wrapper.classList.toggle('checked', i.checked);
+        }
+      });
+    });
+  });
+
+  nextBtn.addEventListener('click', () => {
+    if (!validateSection(current)) return;
+    if (current < totalSections){
+      current++;
+      showSection(current);
+    } else {
+      submitForm();
+    }
+  });
+
+  backBtn.addEventListener('click', () => {
+    if (current > 1){
+      current--;
+      showSection(current);
+    }
+  });
+
+  function collectData(){
+    const data = {};
+    data.q1 = document.getElementById('q1').value;
+    data.q2 = Array.from(document.querySelectorAll('input[name="q2"]:checked')).map(i => i.value).join(', ');
+    data.q2other = document.getElementById('q2other').value;
+    data.q3 = document.getElementById('q3').value;
+    data.q4 = (document.querySelector('input[name="q4"]:checked') || {}).value || '';
+    data.q4other = document.getElementById('q4other').value;
+    data.q5 = (document.querySelector('input[name="q5"]:checked') || {}).value || '';
+    data.q6 = (document.querySelector('input[name="q6"]:checked') || {}).value || '';
+    data.q7 = (document.querySelector('input[name="q7"]:checked') || {}).value || '';
+    data.q8 = (document.querySelector('input[name="q8"]:checked') || {}).value || '';
+    data.q9 = document.getElementById('q9').value;
+    data.q10 = document.getElementById('q10').value;
+    data.timestamp = new Date().toISOString();
+    return data;
+  }
+
+  function submitForm(){
+    form.style.display = 'none';
+    document.getElementById('submittingState').classList.add('active');
+
+    const data = collectData();
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(() => {
+      document.getElementById('submittingState').classList.remove('active');
+      document.getElementById('successState').classList.add('active');
+    })
+    .catch(() => {
+      document.getElementById('submittingState').classList.remove('active');
+      document.getElementById('errorState').classList.add('active');
+    });
+  }
+
+  document.getElementById('retryBtn').addEventListener('click', () => {
+    document.getElementById('errorState').classList.remove('active');
+    form.style.display = 'block';
+  });
+
+  updateProgress();
+</script>
+
+</body>
+</html>
