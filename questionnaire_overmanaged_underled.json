@@ -1,0 +1,81 @@
+{
+  "id": "overmanaged_underled_v1",
+  "status": "open",
+  "eyebrow": "Active Study",
+  "title": "Overmanaged and Underled",
+  "subtitle": "Leadership & Compliance Orientation Study — OMAC International",
+  "description": "This study examines how healthcare organizations balance standards compliance with clinical leadership. Your responses are anonymous and used for research purposes only. The instrument takes approximately 6–8 minutes to complete.",
+  "sections": [
+    {
+      "id": "A",
+      "code": "A",
+      "title": "Respondent & Organizational Context",
+      "type": "context",
+      "questions": [
+        { "id": "A1", "type": "select", "label": "Current role", "options": ["Quality staff", "Clinical staff", "Department head", "Senior leadership", "Other"] },
+        { "id": "A2", "type": "number", "label": "Years of experience in healthcare quality or patient safety" },
+        { "id": "A3", "type": "select", "label": "Sector", "options": ["Public", "Private"] },
+        { "id": "A4", "type": "multiselect", "label": "Accreditation/certification held by your organization", "options": ["JCI", "ISO 9001", "CAP", "Other"] },
+        { "id": "A5", "type": "number", "label": "Number of accreditation/certification cycles your organization has completed" },
+        { "id": "A6", "type": "select", "label": "Time elapsed since your organization's last full accreditation survey/audit", "options": ["<6 months", "6–12 months", "1–2 years", "2–3 years", ">3 years"] }
+      ]
+    },
+    {
+      "id": "B",
+      "code": "ICO",
+      "title": "Instrumental Compliance Orientation",
+      "type": "likert",
+      "scaleLabels": ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"],
+      "questions": [
+        { "id": "B1", "label": "In my organization, leadership treats accreditation standards as a foundation to keep improving on, not a finish line." },
+        { "id": "B2", "label": "After we pass a survey/audit, leadership continues to invest time in strengthening the processes involved." },
+        { "id": "B3", "label": "Leaders in my organization actively look for ways standards can be adapted to improve patient care, beyond minimum compliance." },
+        { "id": "B4", "label": "Leadership revisits and updates protocols even when there is no upcoming survey/audit." },
+        { "id": "B5", "label": "My organization's leaders treat accreditation as an ongoing commitment rather than a one-time achievement." }
+      ]
+    },
+    {
+      "id": "C",
+      "code": "TCO",
+      "title": "Terminal Compliance Orientation",
+      "type": "likert",
+      "scaleLabels": ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"],
+      "questions": [
+        { "id": "C1", "label": "Once accreditation/certification is achieved, leadership attention to the relevant processes noticeably decreases." },
+        { "id": "C2", "label": "In my organization, passing the survey/audit is treated as the main goal, rather than a step toward better care." },
+        { "id": "C3", "label": "Leadership involvement in standards-related activities is highest just before a survey/audit and drops off afterward." },
+        { "id": "C4", "label": "My organization's leaders view compliance primarily as risk avoidance rather than improvement." },
+        { "id": "C5", "label": "Once a standard is \"checked off,\" it rarely gets revisited by leadership." }
+      ]
+    },
+    {
+      "id": "D",
+      "code": "RCB",
+      "title": "Ritualized Compliance Behavior",
+      "type": "likert",
+      "scaleLabels": ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"],
+      "questions": [
+        { "id": "D1", "label": "Staff in my department often complete checklists/protocols without fully engaging with their purpose." },
+        { "id": "D2", "label": "Documentation of compliance sometimes happens even when the actual step was not meaningfully performed." },
+        { "id": "D3", "label": "Checklist or protocol use in my department is treated as a formality rather than a safety practice." },
+        { "id": "D4", "label": "Under time pressure, staff prioritize completing the paperwork over the substance of the check." },
+        { "id": "D5", "label": "I have observed compliance activities becoming \"tick-box\" exercises over time." }
+      ]
+    },
+    {
+      "id": "E",
+      "code": "CLB",
+      "title": "Clinical Leadership Behavior",
+      "type": "likert",
+      "scaleLabels": ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"],
+      "questions": [
+        { "id": "E1", "label": "Leaders in my organization clearly communicate a vision for improving quality beyond minimum requirements." },
+        { "id": "E2", "label": "Leadership actively aligns staff across departments toward shared quality-improvement goals." },
+        { "id": "E3", "label": "Leaders in my organization encourage staff to challenge existing processes when they no longer serve patient safety." },
+        { "id": "E4", "label": "My organization's leadership initiates meaningful change even when current processes are technically compliant." },
+        { "id": "E5", "label": "Leadership in my organization motivates staff to go beyond compliance toward genuine improvement." },
+        { "id": "E6", "label": "When problems are identified, leadership acts on them proactively rather than waiting for the next audit cycle." }
+      ]
+    }
+  ]
+}
