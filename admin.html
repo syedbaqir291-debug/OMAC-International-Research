@@ -95,7 +95,7 @@ function doLogin(){
   AUTH = {username:u, password:p};
   callAdmin('adminLogin').then(function(res){
     if(res && res.ok){ renderDashboard(); }
-    else { AUTH=null; errEl.textContent = 'Incorrect username or password.'; errEl.style.display='block'; }
+    else { AUTH=null; errEl.textContent = (res && res.error) ? res.error : 'Incorrect username or password.'; errEl.style.display='block'; }
   }).catch(function(err){
     errEl.textContent = (err && err.message) || 'Login failed.'; errEl.style.display='block';
   });
