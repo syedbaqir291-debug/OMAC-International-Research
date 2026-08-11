@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F6F5; --panel:#FFFFFF; --panel-2:#EEF1F0; --hairline:#DCE1DF;
+    --text:#1B2321; --text-dim:#657270; --accent:#1F5C5C;
+    --accent-soft:rgba(31,92,92,0.08); --accent-line:rgba(31,92,92,0.30);
+    --good:#2F7D5C; --bad:#B4483F;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;}
+  header{
+    display:flex;align-items:center;gap:14px;padding:20px 28px;
+    border-bottom:1px solid var(--hairline);background:#fff;
+  }
+  header .org{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;}
+  header .sub{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--accent);margin-top:2px;}
+  main{max-width:720px;margin:0 auto;padding:48px 22px 100px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-size:26px;margin:0 0 6px;}
+  p.lead{color:var(--text-dim);font-size:14px;margin:0 0 30px;}
+  .panel{background:var(--panel);border:1px solid var(--hairline);border-radius:14px;padding:28px;margin-bottom:24px;}
+  label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
+  input[type=text],input[type=password],textarea{
+    width:100%;padding:11px 13px;border:1px solid var(--hairline);border-radius:8px;
+    background:var(--panel-2);font-family:'Inter',sans-serif;font-size:14px;color:var(--text);margin-bottom:16px;
+  }
+  textarea{font-family:'JetBrains Mono',monospace;font-size:12px;min-height:160px;resize:vertical;}
+  input:focus,textarea:focus{outline:none;border-color:var(--accent);}
+  button{
+    font-family:'Inter',sans-serif;font-weight:600;font-size:14px;padding:11px 22px;
+    border-radius:8px;border:1px solid var(--hairline);background:transparent;color:var(--text-dim);cursor:pointer;
+  }
+  button.primary{background:var(--accent);color:#F4F6F5;border-color:var(--accent);}
+  button.small{padding:7px 14px;font-size:12.5px;}
+  .row{display:flex;gap:10px;flex-wrap:wrap;}
+  .qitem{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:14px 16px;border:1px solid var(--hairline);border-radius:10px;margin-bottom:10px;
+  }
+  .qitem .meta{font-size:13.5px;}
+  .qitem .id{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);}
+  .badge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+    padding:3px 9px;border-radius:12px;}
+  .badge.open{background:rgba(47,125,92,0.12);color:var(--good);}
+  .badge.closed{background:rgba(180,72,63,0.1);color:var(--bad);}
+  .err{color:var(--bad);font-size:13px;margin-top:-8px;margin-bottom:14px;}
+  .hint{color:var(--text-dim);font-size:12.5px;margin-top:-8px;margin-bottom:16px;}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="org">OMAC International</div>
+    <div class="sub">Research Forum — Admin</div>
+  </div>
+</header>
+<main id="app"></main>
+
+<script>
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFyfCaa1OX1DPHK6bQ-URlkEdClqdATgIQU-E2jJTZ4JUCekb1349uxqKzNTfE7AdF/exec";
+let AUTH = null;
+
+function callAdmin(action, extra){
+  const payload = Object.assign({action: action, username: AUTH ? AUTH.username : undefined, password: AUTH ? AUTH.password : undefined}, extra || {});
+  return fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    headers: {"Content-Type": "text/plain;charset=utf-8"},
+    body: JSON.stringify(payload)
+  }).then(function(r){ return r.json(); });
+}
+
+function renderLogin(){
+  document.getElementById('app').innerHTML =
+    '<h1>Sign in</h1><p class="lead">Enter your admin credentials to manage studies.</p>' +
+    '<div class="panel">' +
+    '<label>Username</label><input type="text" id="u">' +
+    '<label>Password</label><input type="password" id="p">' +
+    '<div class="err" id="loginErr" style="display:none"></div>' +
+    '<button class="primary" id="loginBtn">Sign in</button>' +
+    '</div>';
+  document.getElementById('loginBtn').onclick = doLogin;
+}
+
+function doLogin(){
+  const u = document.getElementById('u').value.trim();
+  const p = document.getElementById('p').value;
+  const errEl = document.getElementById('loginErr');
+  errEl.style.display = 'none';
+  AUTH = {username:u, password:p};
+  callAdmin('adminLogin').then(function(res){
+    if(res && res.ok){ renderDashboard(); }
+    else { AUTH=null; errEl.textContent = 'Incorrect username or password.'; errEl.style.display='block'; }
+  }).catch(function(err){
+    errEl.textContent = (err && err.message) || 'Login failed.'; errEl.style.display='block';
+  });
+}
+
+function renderDashboard(){
+  document.getElementById('app').innerHTML =
+    '<h1>Studies</h1><p class="lead">Only one study is served as "open" at a time by default.</p>' +
+    '<div class="panel" id="listPanel"><p class="hint">Loading…</p></div>' +
+    '<div class="panel">' +
+    '<h1 style="font-size:18px;margin-bottom:14px;">Add a new questionnaire</h1>' +
+    '<label>Questionnaire ID (short, no spaces)</label><input type="text" id="newId" placeholder="e.g. servqual_recovery_v1">' +
+    '<label>Title</label><input type="text" id="newTitle" placeholder="Shown to respondents">' +
+    '<label>Schema JSON</label><textarea id="newJson" placeholder="Paste the full questionnaire JSON here"></textarea>' +
+    '<div class="err" id="addErr" style="display:none"></div>' +
+    '<button class="primary" id="addBtn">Publish &amp; open</button>' +
+    '</div>' +
+    '<button id="logoutBtn">Sign out</button>';
+  document.getElementById('addBtn').onclick = doAdd;
+  document.getElementById('logoutBtn').onclick = function(){ AUTH=null; renderLogin(); };
+  loadList();
+}
+
+function loadList(){
+  const panel = document.getElementById('listPanel');
+  callAdmin('adminListQuestionnaires').then(function(res){
+    if(!res.ok){ panel.innerHTML = '<p class="err">Could not load studies.</p>'; return; }
+    if(!res.items.length){ panel.innerHTML = '<p class="hint">No questionnaires yet — add one below.</p>'; return; }
+    panel.innerHTML = res.items.map(function(it){
+      return '<div class="qitem">' +
+        '<div class="meta"><div>' + escapeHtml(it.title) + '</div><div class="id">' + escapeHtml(it.id) + '</div></div>' +
+        '<div class="row">' +
+        '<span class="badge ' + (it.status==='open'?'open':'closed') + '">' + it.status + '</span>' +
+        '<button class="small" data-id="' + it.id + '" data-status="' + (it.status==='open'?'closed':'open') + '">' +
+        (it.status==='open' ? 'Close' : 'Open') + '</button>' +
+        '</div></div>';
+    }).join('');
+    panel.querySelectorAll('button[data-id]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        toggleStatus(btn.getAttribute('data-id'), btn.getAttribute('data-status'));
+      });
+    });
+  }).catch(function(){
+    panel.innerHTML = '<p class="err">Could not load studies.</p>';
+  });
+}
+
+function toggleStatus(id, status){
+  callAdmin('adminSetStatus', {id:id, status:status}).then(function(res){
+    if(res && res.ok) loadList();
+  });
+}
+
+function doAdd(){
+  const id = document.getElementById('newId').value.trim();
+  const title = document.getElementById('newTitle').value.trim();
+  const json = document.getElementById('newJson').value.trim();
+  const errEl = document.getElementById('addErr');
+  errEl.style.display = 'none';
+  if(!id || !title || !json){ errEl.textContent = 'All fields are required.'; errEl.style.display='block'; return; }
+  try{ JSON.parse(json); } catch(e){ errEl.textContent = 'That is not valid JSON: ' + e.message; errEl.style.display='block'; return; }
+  callAdmin('adminAddQuestionnaire', {id:id, title:title, schemaJson:json, exclusive:true}).then(function(res){
+    if(res && res.ok){
+      document.getElementById('newId').value='';
+      document.getElementById('newTitle').value='';
+      document.getElementById('newJson').value='';
+      loadList();
+    } else {
+      errEl.textContent = (res && res.error) || 'Could not publish.'; errEl.style.display='block';
+    }
+  }).catch(function(err){
+    errEl.textContent = (err && err.message) || 'Could not publish.'; errEl.style.display='block';
+  });
+}
+
+function escapeHtml(str){
+  return String(str==null?'':str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+renderLogin();
+</script>
+</body>
+</html>
