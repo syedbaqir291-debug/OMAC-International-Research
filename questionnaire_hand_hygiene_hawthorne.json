@@ -1,0 +1,77 @@
+{
+  "id": "hand_hygiene_hawthorne_v1",
+  "status": "draft",
+  "eyebrow": "Active Study",
+  "title": "The Observation Paradox",
+  "subtitle": "Concurrent Audit Reactivity in Hand Hygiene Compliance — OMAC International",
+  "description": "This study examines whether staff hand hygiene behavior (WHO 5 Moments) changes when a concurrent auditor is present, and how large that gap is perceived to be. Your responses are anonymous and used for research purposes only. The instrument takes approximately 5–7 minutes to complete.",
+  "sections": [
+    {
+      "id": "A",
+      "code": "A",
+      "title": "Respondent & Organizational Context",
+      "type": "context",
+      "questions": [
+        { "id": "A1", "type": "select", "label": "Current role", "options": ["Quality/Patient Safety staff", "Infection Control staff", "Clinical staff (nursing)", "Clinical staff (physician)", "Department head", "Other"] },
+        { "id": "A2", "type": "select", "label": "Do you personally conduct hand hygiene audits/observations as part of your role?", "options": ["Yes, regularly", "Yes, occasionally", "No"] },
+        { "id": "A3", "type": "number", "label": "Years of experience in healthcare quality, infection control, or clinical practice" },
+        { "id": "A4", "type": "select", "label": "Sector", "options": ["Public", "Private"] },
+        { "id": "A5", "type": "select", "label": "Method your organization primarily uses to audit hand hygiene compliance", "options": ["Direct/concurrent observation only", "Direct observation + product consumption data", "Direct observation + electronic monitoring", "Covert/secret shopper observation", "Not sure"] },
+        { "id": "A6", "type": "select", "label": "Accreditation status of your organization", "options": ["JCI accredited", "ISO 9001 certified", "Healthcare Commission licensed", "Multiple of the above", "None currently"] }
+      ]
+    },
+    {
+      "id": "B",
+      "code": "OCA",
+      "title": "Observed Compliance Awareness",
+      "type": "likert",
+      "scaleLabels": ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"],
+      "questions": [
+        { "id": "B1", "label": "Staff in my unit can usually tell when a hand hygiene auditor is observing them." },
+        { "id": "B2", "label": "Staff behavior around hand hygiene visibly changes once an auditor is noticed nearby." },
+        { "id": "B3", "label": "Word spreads quickly among staff when an audit or auditor is present in the department." },
+        { "id": "B4", "label": "Staff perform hand hygiene more consistently when they know they are being watched than when they are not." },
+        { "id": "B5", "label": "The presence of an auditor changes not just whether hand hygiene is performed, but how correctly the technique/moments are followed." }
+      ]
+    },
+    {
+      "id": "C",
+      "code": "UCG",
+      "title": "Unobserved Compliance Gap",
+      "type": "likert",
+      "scaleLabels": ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"],
+      "questions": [
+        { "id": "C1", "label": "In my honest assessment, all 5 Moments of hand hygiene are not consistently followed when no auditor is present." },
+        { "id": "C2", "label": "Hand hygiene is more often skipped before patient contact than after, when unobserved." },
+        { "id": "C3", "label": "During high-workload or emergency situations, hand hygiene compliance drops noticeably regardless of auditing." },
+        { "id": "C4", "label": "I believe the true, unobserved hand hygiene compliance rate in my unit is meaningfully lower than the rate reported from concurrent audits." },
+        { "id": "C5", "label": "Some staff perform an abbreviated or rushed version of hand hygiene when they believe no one is watching." }
+      ]
+    },
+    {
+      "id": "D",
+      "code": "ACR",
+      "title": "Auditor-Side Comparative Reflection",
+      "type": "likert",
+      "scaleLabels": ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"],
+      "questions": [
+        { "id": "D1", "label": "As an auditor, I sometimes suspect my observed compliance percentage is higher than actual day-to-day compliance." },
+        { "id": "D2", "label": "Covert or unannounced observation, where feasible, tends to show lower compliance than scheduled/known audits." },
+        { "id": "D3", "label": "Product consumption data (soap/alcohol-rub usage per patient-day) in my organization does not fully match the compliance percentage reported from direct observation." },
+        { "id": "D4", "label": "Relying only on direct observation gives leadership a falsely reassuring picture of hand hygiene compliance." },
+        { "id": "D5", "label": "A triangulated approach (observation + consumption data + covert checks) would give a more accurate compliance picture than observation alone." }
+      ]
+    },
+    {
+      "id": "E",
+      "code": "SRF",
+      "title": "Systemic Root Factors",
+      "type": "context",
+      "questions": [
+        { "id": "E1", "type": "multiselect", "label": "In your view, what drives the gap between observed and actual hand hygiene compliance? (Select all that apply)", "options": ["Awareness of being watched (Hawthorne effect)", "High workload / staffing shortage", "Dispenser/product not easily accessible", "Lack of genuine belief in infection-control value", "Fear of being penalized during audit, not otherwise", "Fatigue with repetitive protocol", "Weak reinforcement/feedback outside audit periods", "Other"] },
+        { "id": "E2", "type": "select", "label": "How often does your organization use non-observational data (e.g., product consumption, electronic dispenser counts) to cross-check hand hygiene compliance?", "options": ["Regularly", "Occasionally", "Rarely", "Never", "Not sure"] },
+        { "id": "E3", "type": "text", "label": "Any additional comments on the difference between observed and actual hand hygiene compliance in your experience? (Optional)" }
+      ]
+    }
+  ]
+}
