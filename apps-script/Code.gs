@@ -220,7 +220,9 @@ function getSheet_(name) {
 }
 
 function findQuestionnaireRow_(sheet, id) {
-  const ids = sheet.getRange(2, 1, Math.max(sheet.getLastRow() - 1, 0), 1).getValues();
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return -1; // header row only (or empty) — nothing to search
+  const ids = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
   for (let i = 0; i < ids.length; i++) {
     if (ids[i][0] === id) return i + 1; // 0-based data row index (sheet row = this + 1)
   }
@@ -250,6 +252,30 @@ function verifyAdmin_(username, password) {
     if (String(rows[i][0]) === String(username) && String(rows[i][1]) === String(password)) return true;
   }
   return false;
+}
+
+/**
+ * Diagnostic only — run this from the Apps Script editor (function
+ * dropdown > debugAccounts > Run), then check View > Logs (or the
+ * "Execution log" panel that pops up). It prints exactly what's
+ * stored on the Accounts sheet, wrapped in brackets so any invisible
+ * leading/trailing space becomes obvious, without ever sending
+ * anything over the network. Delete the row(s) shown as wrong, retype
+ * them fresh, and re-run to confirm. Safe to leave in the project —
+ * it does nothing unless you run it yourself.
+ */
+function debugAccounts() {
+  const sheet = getSheet_(ACCOUNTS_SHEET);
+  const rows = sheet.getDataRange().getValues();
+  if (rows.length < 2) {
+    Logger.log("Accounts sheet has no rows below the header — add one: username in column A, password in column B.");
+    return;
+  }
+  for (let i = 1; i < rows.length; i++) {
+    const u = String(rows[i][0]);
+    const p = String(rows[i][1]);
+    Logger.log("Row " + (i + 1) + " — username: [" + u + "] (length " + u.length + ")  password: [" + p + "] (length " + p.length + ")");
+  }
 }
 
 /** Returns every questionnaire's id/title/status/created_at (not the full schema). */
